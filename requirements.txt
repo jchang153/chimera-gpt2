@@ -1,0 +1,5 @@
+torch
+tqdm
+transformers
+datasets
+hf_transfer
