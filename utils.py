@@ -18,3 +18,40 @@ def generate_text(model, tokenizer, prompt, device, max_new_tokens, temperature=
     print("\n---\nFull output:")
     print(tokenizer.decode(generated[0], skip_special_tokens=True))
     return tokenizer.decode(generated[0], skip_special_tokens=True)
+
+def evaluate_c(loader, model, controller, device, max_batches=None):
+    controller.set_active("ALL")
+    model.eval()
+    total_loss = 0.0
+    total_tokens = 0
+
+    with torch.no_grad():
+        for step, (x, y) in enumerate(loader, start=1):
+            x, y = x.to(device), y.to(device)
+            out = model(input_ids=x, labels=y)
+            total_loss += out.loss.item() * x.numel()
+            total_tokens += x.numel()
+
+            if max_batches is not None and step >= max_batches:
+                break
+
+    model.train()
+    return total_loss / max(1, total_tokens)   # per-token average loss
+
+def evaluate(loader, model, device, max_batches=None):
+    model.eval()
+    total_loss = 0.0
+    total_tokens = 0
+
+    with torch.no_grad():
+        for step, (x, y) in enumerate(loader, start=1):
+            x, y = x.to(device), y.to(device)
+            out = model(input_ids=x, labels=y)
+            total_loss += out.loss.item() * x.numel()
+            total_tokens += x.numel()
+
+            if max_batches is not None and step >= max_batches:
+                break
+
+    model.train()
+    return total_loss / max(1, total_tokens)   # per-token average loss
