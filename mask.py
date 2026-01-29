@@ -148,7 +148,7 @@ def register_hooks(model, a):
     return active, masks_1, masks_2
 
 
-
+# registers hooks that also affect forward pass
 # --- Parametrization module: elementwise (Hadamard) mask ---
 class HadamardMask(nn.Module):
     def __init__(self, mask: torch.Tensor):

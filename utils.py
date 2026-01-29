@@ -12,8 +12,8 @@ def generate_text(model, tokenizer, prompt, device, max_new_tokens, temperature=
             topk_logits, topk_indices = torch.topk(next_token_logits, top_k)
             probs = torch.softmax(topk_logits, dim=-1)
             next_token = topk_indices[0][torch.multinomial(probs, num_samples=1)]
-        generated = torch.cat([generated, next_token.unsqueeze(0)], dim=1)
-        print(tokenizer.decode(next_token), end="", flush=True)
+        generated = torch.cat([generated, next_token], dim=1)
+        print(tokenizer.decode(next_token[0]), end="", flush=True)
 
     print("\n---\nFull output:")
     print(tokenizer.decode(generated[0], skip_special_tokens=True))

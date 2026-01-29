@@ -4,3 +4,4 @@ transformers
 datasets
 hf_transfer
 matplotlib
+wandb
